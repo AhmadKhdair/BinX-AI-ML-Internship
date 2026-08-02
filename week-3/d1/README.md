@@ -1,69 +1,115 @@
 # Week 3 — Day 1: Linear Regression Fundamentals
 
-This notebook introduces supervised machine learning through a complete Linear Regression workflow using Scikit-learn.
+> A complete, reproducible introduction to supervised regression using NumPy, Pandas, Matplotlib, and Scikit-learn.
 
-A controlled synthetic dataset is used so that the true mathematical relationship is known in advance. This makes it possible to verify whether the trained model successfully recovers the underlying signal, ignores irrelevant features, and generalizes to unseen data.
+[Open the notebook](./01_linear_regression.ipynb)
 
-**Notebook:** [Open `01_linear_regression.ipynb`](./01_linear_regression.ipynb)
+---
 
-## Learning Objectives
+## Overview
 
-By completing this notebook, I was able to:
+This notebook explains how a Linear Regression model represents a numeric relationship, learns its parameters from training data, makes predictions on unseen observations, and is evaluated using both numerical metrics and residual diagnostics.
 
-- Distinguish supervised learning, regression, and classification.
-- Explain features, targets, weights, and the intercept.
-- Calculate linear predictions manually and with vectorized NumPy operations.
-- Understand how Ordinary Least Squares estimates model parameters.
-- Split data into training and test sets without data leakage.
-- Train a `LinearRegression` model using Scikit-learn.
-- Compare learned parameters with known true parameters.
-- Evaluate regression performance using MSE, RMSE, and $R^2$.
-- Compare the trained model with a mean-prediction baseline.
-- Inspect residual plots for systematic error patterns.
+A controlled synthetic dataset is used because its true mathematical relationship is known in advance. This allows the learned parameters to be compared directly with the values that generated the data.
+
+## At a Glance
+
+| Item | Details |
+|---|---|
+| Learning type | Supervised learning |
+| Task | Regression |
+| Model | Ordinary Least Squares Linear Regression |
+| Dataset | Synthetic, 500 observations, 5 features |
+| Data split | 80% training, 20% testing |
+| Main library | Scikit-learn |
+| Evaluation | MSE, RMSE, R², baseline comparison, residual diagnostics |
+| Reproducibility | Fixed random seed: `42` |
+
+---
+
+## What the Notebook Contains
+
+The notebook is organized as a complete learning path rather than a single model-training cell.
+
+| Section | What is covered | Why it matters |
+|---:|---|---|
+| 1 | Supervised learning | Introduces labeled data, features, and targets. |
+| 2 | Regression vs. classification | Explains why predicting a number differs from predicting a class. |
+| 3 | Linear relationships | Introduces weights, the intercept, and the prediction equation. |
+| 4 | Manual prediction | Shows how each feature contributes to one prediction. |
+| 5 | Dot products and matrix multiplication | Connects the mathematical equation to vectorized NumPy operations. |
+| 6 | Multiple observations | Applies one weight vector to an entire feature matrix. |
+| 7 | Synthetic dataset design | Creates data with known informative and irrelevant features. |
+| 8 | Train/test split | Separates model learning from fair evaluation on unseen data. |
+| 9 | Model training | Uses `LinearRegression().fit()` to learn weights and an intercept. |
+| 10 | Parameter comparison | Compares learned parameters with the known true parameters. |
+| 11 | Prediction | Uses `model.predict()` on the test set. |
+| 12 | Model evaluation | Calculates MSE, RMSE, and R². |
+| 13 | Baseline comparison | Verifies that the trained model adds value over predicting the mean. |
+| 14 | Overfitting check | Compares training and test performance. |
+| 15 | Residual diagnostics | Inspects error patterns using three diagnostic plots. |
+
+After completing the notebook, the reader should be able to explain the full workflow:
+
+```text
+features and target
+        ↓
+train/test split
+        ↓
+model.fit(...)
+        ↓
+model.predict(...)
+        ↓
+evaluation and diagnostics
+```
+
+---
 
 ## Experiment Design
 
-The target was generated using the following known relationship:
+The target was generated from the following known relationship:
 
-$$
-y
-=
-4
-+
-3x_1
--
-2x_2
-+
-1.5x_3
-+
-0x_4
-+
-0x_5
-+
-\varepsilon
-$$
+```math
+y = 4 + 3x_1 - 2x_2 + 1.5x_3 + 0x_4 + 0x_5 + \varepsilon
+```
 
 Where:
 
-- $x_1$, $x_2$, and $x_3$ are informative features.
-- $x_4$ and $x_5$ are irrelevant noise features with true weights of zero.
-- The true intercept is $4$.
-- $\varepsilon$ represents random noise.
+- `x1`, `x2`, and `x3` are informative features.
+- `x4` and `x5` are irrelevant features with true weights of zero.
+- `4` is the true intercept.
+- `ε` is random noise added to make the observations realistic.
 
-The dataset contains 500 observations and five input features. A fixed random seed of `42` is used to make the experiment reproducible.
+The experiment intentionally includes irrelevant features to test whether the model keeps their learned weights close to zero.
 
-## Workflow
+---
 
-1. Review the structure of supervised learning problems.
-2. Calculate a linear prediction manually.
-3. Express predictions using dot products and matrix multiplication.
-4. Generate a controlled synthetic regression dataset.
-5. Split the data into 80% training and 20% testing sets.
-6. Train an Ordinary Least Squares Linear Regression model.
-7. Compare learned and true model parameters.
-8. Generate predictions on unseen test data.
-9. Evaluate the model and compare it with a baseline.
-10. Inspect residual diagnostic plots.
+## Core Machine Learning Workflow
+
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42
+)
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+```
+
+The notebook explains each stage before applying it:
+
+- `train_test_split()` creates separate learning and evaluation data.
+- `fit()` learns the model parameters from the training set.
+- `predict()` applies the learned relationship to unseen observations.
+
+---
 
 ## Results
 
@@ -72,17 +118,17 @@ The dataset contains 500 observations and five input features. A fixed random se
 | Parameter | True Value | Learned Value |
 |---|---:|---:|
 | Intercept | 4.0000 | 4.0313 |
-| $x_1$ | 3.0000 | 3.0933 |
-| $x_2$ | -2.0000 | -1.9932 |
-| $x_3$ | 1.5000 | 1.4705 |
-| $x_4$ | 0.0000 | -0.0329 |
-| $x_5$ | 0.0000 | 0.0398 |
+| `x1` | 3.0000 | 3.0933 |
+| `x2` | -2.0000 | -1.9932 |
+| `x3` | 1.5000 | 1.4705 |
+| `x4` | 0.0000 | -0.0329 |
+| `x5` | 0.0000 | 0.0398 |
 
-The model recovered the informative feature weights accurately, while the irrelevant features remained close to zero.
+The learned values are close to the true values. The informative features retained meaningful weights, while the two irrelevant features remained close to zero.
 
-### Model Performance
+### Performance
 
-| Dataset / Model | RMSE | $R^2$ |
+| Dataset / Model | RMSE | R² |
 |---|---:|---:|
 | Training set | 1.0250 | 0.9316 |
 | Test set | 0.9378 | 0.9423 |
@@ -92,17 +138,42 @@ Additional test metric:
 
 - **Test MSE:** `0.8794`
 
-The trained model substantially outperformed the mean baseline. Training and test performance were also similar, indicating no clear overfitting in this experiment.
+### Interpretation
+
+- The model substantially outperformed the mean-prediction baseline.
+- Training and test scores were similar, so there was no clear sign of overfitting.
+- The test RMSE was close to the scale of the intentionally added random noise.
+- The high test R² indicates that the model recovered most of the underlying signal.
+
+---
 
 ## Residual Diagnostics
 
-The notebook includes:
+The notebook contains three diagnostic visualizations:
 
-- Actual versus predicted values.
-- Residuals versus predicted values.
-- A histogram of residuals.
+1. **Actual vs. Predicted Values** — checks whether predictions follow the ideal diagonal line.
+2. **Residuals vs. Predicted Values** — checks for curves, trends, or changing error spread.
+3. **Residual Distribution** — checks whether the errors are centered around zero.
 
-The predictions remain close to the ideal reference line, and the residuals are distributed around zero without a strong systematic pattern. This supports the suitability of a linear model for the generated data.
+The resulting residuals were distributed around zero without a strong systematic pattern, which is consistent with the linear relationship used to generate the data.
+
+---
+
+## Learning Outcomes
+
+By the end of this notebook, the reader should be able to:
+
+- Identify `X` as the feature matrix and `y` as the target vector.
+- Explain the role of feature weights and the intercept.
+- Connect a linear equation with dot products and matrix multiplication.
+- Distinguish between `fit()` and `predict()`.
+- Explain why training and test data must be separated.
+- Interpret MSE, RMSE, and R² at a practical level.
+- Compare a trained model with a simple baseline.
+- Recognize the basic signs of overfitting.
+- Use residual plots to detect problems hidden by summary metrics.
+
+---
 
 ## Project Structure
 
@@ -122,7 +193,7 @@ week-3/
 - Scikit-learn
 - Jupyter Notebook or JupyterLab
 
-Install the required packages with:
+Install the required packages:
 
 ```bash
 pip install numpy pandas matplotlib scikit-learn jupyter
@@ -130,27 +201,31 @@ pip install numpy pandas matplotlib scikit-learn jupyter
 
 ## How to Run
 
-1. Activate the project's virtual environment.
-2. Launch Jupyter from the repository directory:
+From the repository root:
 
 ```bash
 jupyter notebook
 ```
 
-3. Open `week-3/d1/01_linear_regression.ipynb`.
-4. Restart the kernel and run all cells from top to bottom.
+Then:
 
-The notebook should execute without requiring an external dataset.
+1. Open `week-3/d1/01_linear_regression.ipynb`.
+2. Restart the kernel.
+3. Run all cells from top to bottom.
+4. Confirm that the metric values and plots are generated without errors.
+
+No external dataset is required for this notebook.
+
+---
 
 ## Key Takeaways
 
-- `fit()` learns the model parameters from training data.
-- `predict()` applies the learned relationship to new observations.
-- A train/test split provides a fairer estimate of generalization performance.
-- A baseline is necessary to determine whether a trained model adds real predictive value.
-- Residual analysis reveals model behavior that a single metric may not show.
-- Synthetic data is useful here because the true parameters are known and can be compared directly with the learned parameters.
+- Linear Regression learns weights and an intercept from labeled numeric data.
+- `fit()` performs learning; `predict()` uses what was learned.
+- Test data provides a more honest estimate of performance on unseen observations.
+- Metrics should be interpreted alongside a baseline and diagnostic plots.
+- Synthetic data is useful here because the hidden relationship is known and can be verified.
 
 ## Next Step
 
-Continue with **Logistic Regression and binary classification** using the Titanic dataset, where the target variable is `Survived`.
+Continue with **Logistic Regression and binary classification** using the Titanic dataset, where the target is `Survived`.
