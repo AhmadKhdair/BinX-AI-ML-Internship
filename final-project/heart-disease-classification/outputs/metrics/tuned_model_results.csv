@@ -1,0 +1,4 @@
+model,best_roc_auc_cv,best_params,mean_train_roc_auc,mean_cv_accuracy,mean_cv_precision,mean_cv_recall,mean_cv_f1
+Random Forest,0.9345517716249423,"{'model__max_depth': None, 'model__max_features': 'sqrt', 'model__min_samples_leaf': 4, 'model__n_estimators': 100}",0.9821583924191533,0.8542540303792749,0.85435297650499,0.891749473050286,0.8716403162055336
+Logistic Regression,0.9255236683420967,"{'model__C': 1.0, 'model__class_weight': None}",0.932964065308399,0.8447115832634424,0.8568328985592413,0.8670280036133693,0.8609539134645319
+Decision Tree,0.9090459455229103,"{'model__criterion': 'gini', 'model__max_depth': 3, 'model__min_samples_leaf': 8}",0.9219459492953626,0.8338365483179573,0.8683314355327785,0.8376091538693166,0.8486057906700596

@@ -1,0 +1,8 @@
+{
+  "selected_model": "Random Forest",
+  "test_accuracy": 0.8695652173913043,
+  "test_precision": 0.8679245283018868,
+  "test_recall": 0.9019607843137255,
+  "test_f1": 0.8846153846153846,
+  "test_roc_auc": 0.9172644667623148
+}
