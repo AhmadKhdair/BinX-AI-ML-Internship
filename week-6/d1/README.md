@@ -79,6 +79,3 @@ jupyter notebook Week6_Day1_Sprint1_Baseline.ipynb
 
 Run all cells from top to bottom. The notebook will create the `outputs/` folder if it does not already exist.
 
-## Next Step
-
-The next Week 6 work should build a small neural network using the processed feature vector, validate it on training/validation data, and compare the final model against the frozen tuned Random Forest benchmark.
