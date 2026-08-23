@@ -1,0 +1,13 @@
+column,type,description,values_or_notes
+Age,numeric,Patient age in years,Integer values
+Sex,categorical,Patient sex,M = Male; F = Female
+ChestPainType,categorical,Chest pain type,TA = Typical Angina; ATA = Atypical Angina; NAP = Non-Anginal Pain; ASY = Asymptomatic
+RestingBP,numeric,Resting blood pressure in mm Hg,0 is treated as invalid and imputed
+Cholesterol,numeric,Serum cholesterol in mg/dl,0 is treated as missing/unknown and imputed
+FastingBS,binary,Fasting blood sugar indicator,1 = fasting blood sugar > 120 mg/dl; 0 = otherwise
+RestingECG,categorical,Resting electrocardiogram result,Normal; ST; LVH
+MaxHR,numeric,Maximum heart rate achieved,Integer values
+ExerciseAngina,categorical,Exercise-induced angina,Y = Yes; N = No
+Oldpeak,numeric,ST depression induced by exercise relative to rest,Continuous numeric value
+ST_Slope,categorical,Slope of the peak exercise ST segment,Up; Flat; Down
+HeartDisease,binary,Target variable,1 = heart disease; 0 = no heart disease

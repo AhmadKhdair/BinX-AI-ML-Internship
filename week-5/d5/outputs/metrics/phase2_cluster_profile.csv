@@ -1,0 +1,3 @@
+cluster,size,heart_disease_pct,avg_age,avg_resting_bp,avg_cholesterol,fasting_bs_rate,avg_max_hr,avg_oldpeak,exercise_angina_pct
+0,325,86.46,57.84,137.29,252.38,0.32,121.5,1.63,78.15
+1,409,30.56,50.68,129.37,242.52,0.15,148.2,0.26,11.25

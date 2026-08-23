@@ -1,0 +1,6 @@
+section,result
+dataset,"918 rows, 11 features, 1 target"
+cleaning,RestingBP=0 and Cholesterol=0 treated as missing values
+validation,"5-fold stratified CV on training set, held-out test set used once"
+selected_model,Random Forest
+test_metrics,"Accuracy=0.870, F1=0.885, ROC-AUC=0.917"
