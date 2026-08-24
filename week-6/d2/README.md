@@ -122,5 +122,3 @@ hidden layers -> ReLU
 binary output -> Sigmoid
 training loss -> Binary Cross-Entropy
 ```
-
-Backpropagation, gradients, and optimizer updates are intentionally left for Day 3.
