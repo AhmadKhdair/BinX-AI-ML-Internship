@@ -1,0 +1,3 @@
+model,hidden_units,params,checkpoint_size_kb,comment
+Day 4 NN architecture,"(64, 32)",4161,,small enough for instant CPU inference
+Day 5 selected NN,"(64, 32)",4161,82.7470703125,model size is tiny; preprocessing will dominate deployment complexity

@@ -1,0 +1,2 @@
+selected_experiment,hidden_units,dropout_rate,learning_rate,batch_size,params,best_val_loss,val_f1,val_roc_auc,selection_rule
+dropout_0p1,"(64, 32)",0.1,0.001,32,4161,0.3435405492782593,0.8148148148148148,0.9227459783015337,lowest validation loss; no Day 5 tuning used test metrics
