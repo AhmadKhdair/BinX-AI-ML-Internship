@@ -1,148 +1,107 @@
-# Heart Disease Classification
+# Week 5 - Day 5: Heart Disease Unsupervised Learning Extension
 
-This project builds a complete machine learning workflow for classifying heart disease presence from clinical and cardiac examination features.
+This folder contains the Day 5 continuation of the Heart Disease Classification project.
 
-The main task is supervised binary classification:
+The original project was built as a supervised classification workflow using `HeartDisease` as the target. This version extends the same dataset with Week 5 unsupervised learning methods to explore hidden structure, patient subgroups, density behavior, low-dimensional visualizations, and unusual records.
 
-- `0`: no heart disease
-- `1`: heart disease
+The unsupervised section does not use `HeartDisease` during fitting. The target is added back only after clustering or anomaly detection for interpretation.
 
-The project also includes a Phase 2 unsupervised learning extension using `PCA` and `KMeans` to explore patient groups without using the target during clustering.
+## Files
 
-This project is educational. It is not a medical diagnosis system and it does not predict future heart disease risk.
-
-## Project Structure
-
-```text
-heart-disease-classification/
-├── README.md
-├── requirements.txt
-├── data/
-│   ├── heart.csv
-│   └── data_dictionary.csv
-├── notebooks/
-│   └── Heart_Disease_Classification_Final.ipynb
-└── outputs/
-    ├── figures/
-    └── metrics/
-```
+| File | Description |
+|---|---|
+| `Heart_Disease_Classification_Final.ipynb` | Main notebook with supervised workflow and Week 5 unsupervised extension |
+| `data/heart.csv` | Heart disease dataset |
+| `data/data_dictionary.csv` | Column descriptions |
+| `outputs/figures/` | Generated plots |
+| `outputs/metrics/` | Generated metrics and profiling tables |
 
 ## Dataset
 
-The dataset contains `918` records and `12` columns:
+The dataset is a tabular clinical dataset with 918 patient records.
 
-- `11` input features
-- `1` target column: `HeartDisease`
-
-The features describe patient age, sex, chest pain type, resting blood pressure, cholesterol, fasting blood sugar, resting ECG result, maximum heart rate, exercise-induced angina, oldpeak, and ST slope.
-
-## Main Workflow
-
-The notebook follows a top-to-bottom machine learning workflow:
-
-1. Load the dataset.
-2. Validate the expected columns.
-3. Audit data types, missing values, duplicates, and target balance.
-4. Clean medically invalid zero values:
-   - `RestingBP = 0` is treated as invalid.
-   - `Cholesterol = 0` is treated as missing/unknown.
-5. Split the data into training and held-out test sets.
-6. Run EDA and descriptive statistics on the training set only.
-7. Build preprocessing and feature engineering inside scikit-learn pipelines.
-8. Compare `Logistic Regression`, `Decision Tree`, and `Random Forest` using 5-fold stratified cross-validation.
-9. Tune models using `GridSearchCV` on the training set only.
-10. Evaluate the selected final model once on the held-out test set.
-11. Add Phase 2 unsupervised analysis with `PCA` and `KMeans`.
-
-## Cleaning Strategy
-
-The original dataset does not contain visible missing values or duplicated rows.
-
-The main cleaning issue is invalid zero values:
-
-- `RestingBP = 0`: not valid for resting blood pressure.
-- `Cholesterol = 0`: not realistic as a serum cholesterol value.
-
-These values are converted to `NaN`, then handled inside the preprocessing pipeline using median imputation. The cholesterol-zero rows are not dropped because they represent a large part of the dataset, and dropping them could bias the training sample.
-
-## Feature Engineering
-
-The notebook adds simple and explainable engineered features:
-
-- `MaxHRRatio`: maximum heart rate divided by age-based expected maximum heart rate.
-- `OldpeakPositive`: whether `Oldpeak` is greater than zero.
-- `ExerciseOldpeak`: interaction between exercise-induced angina and oldpeak.
-- `AgeGroup`: broad age group.
-
-These features are created inside the pipeline to avoid leakage during cross-validation and tuning.
-
-## Models
-
-The supervised section uses classical machine learning models:
-
-- `Logistic Regression`
-- `Decision Tree`
-- `Random Forest`
-
-The selected final model is `Random Forest`.
-
-## Supervised Results
-
-Final held-out test results:
-
-| Metric | Value |
+| Item | Value |
 |---|---:|
-| Accuracy | 0.870 |
-| Precision | 0.868 |
-| Recall | 0.902 |
-| F1-score | 0.885 |
-| ROC-AUC | 0.917 |
+| Rows | 918 |
+| Original features | 11 |
+| Target | `HeartDisease` |
+| Target type | Binary classification |
 
-Confusion matrix on the held-out test set:
+The target values are:
 
-| | Predicted No Heart Disease | Predicted Heart Disease |
-|---|---:|---:|
-| Actual No Heart Disease | 68 | 14 |
-| Actual Heart Disease | 10 | 92 |
+| Value | Meaning |
+|---:|---|
+| 0 | No heart disease |
+| 1 | Heart disease |
 
-The model achieved strong recall for the positive class, which is important in medical-style classification problems because false negatives are usually more costly than false positives.
+Main feature groups:
 
-## Phase 2: Unsupervised Learning Extension
+- Numeric: `Age`, `RestingBP`, `Cholesterol`, `FastingBS`, `MaxHR`, `Oldpeak`
+- Categorical: `Sex`, `ChestPainType`, `RestingECG`, `ExerciseAngina`, `ST_Slope`
 
-The unsupervised section is added as a separate extension after the supervised model is complete.
+This project is an ML classification and exploratory analysis project. It is not a medical diagnosis system.
 
-The goal is not to improve the final classifier. The goal is to explore whether the feature space contains patient groups with different clinical patterns.
+## Preprocessing
 
-Important rule:
+The same preprocessing logic is reused from the supervised workflow:
 
-`HeartDisease` is not used to fit `PCA` or `KMeans`. It is used only after clustering to interpret the discovered groups.
+- `RestingBP = 0` is treated as invalid and converted to missing.
+- `Cholesterol = 0` is treated as missing/unknown.
+- Numeric features use median imputation and standard scaling.
+- Categorical features use most-frequent imputation and one-hot encoding.
+- Feature engineering adds `MaxHRRatio`, `OldpeakPositive`, `ExerciseOldpeak`, and `AgeGroup`.
 
-The extension includes:
+The unsupervised feature matrix is built from the training split only:
 
-- Preparing the training features without the target.
-- Applying the same preprocessing logic used in the supervised pipeline.
-- Using `PCA` to reduce the preprocessed feature matrix to two components for visualization.
-- Using `KMeans` to cluster the training records.
-- Choosing `k` using `Elbow Method` and `Silhouette Score`.
-- Profiling clusters using clinical features and heart-disease rate.
+| Split | Rows |
+|---|---:|
+| Training | 734 |
+| Test | 184 |
 
-## Unsupervised Results
-
-The preprocessed unsupervised matrix has shape:
+After preprocessing and encoding, the unsupervised matrix has:
 
 ```text
-(734, 27)
+734 rows x 27 features
 ```
 
-This means:
+The increase from 11 to 27 features comes from engineered features and one-hot encoding of categorical columns.
 
-- `734` training records
-- `27` features after preprocessing, one-hot encoding, and feature engineering
+## Supervised Baseline Context
 
-The best cluster count from the tested range was:
+The supervised part compares Logistic Regression, Decision Tree, and Random Forest using 5-fold stratified cross-validation. The final selected supervised model is a tuned Random Forest.
+
+| Metric | Test Result |
+|---|---:|
+| Accuracy | 0.8696 |
+| Precision | 0.8679 |
+| Recall | 0.9020 |
+| F1-score | 0.8846 |
+| ROC-AUC | 0.9173 |
+
+This baseline is kept as context. The Week 5 extension is exploratory and unsupervised.
+
+## Week 5 Unsupervised Methods
+
+### PCA
+
+PCA is used for 2D visualization of the preprocessed feature space.
+
+| Component | Explained Variance |
+|---|---:|
+| PC1 | 27.43% |
+| PC2 | 14.55% |
+
+Together, the first two principal components explain about 42% of the variance. The PCA plot is useful for visual inspection, but it does not represent the full feature space.
+
+### KMeans Clustering
+
+KMeans is tested with `k` values from 2 to 8 using inertia and silhouette score.
+
+The best selected value is:
 
 ```text
 k = 2
+silhouette_score = 0.1902
 ```
 
 Cluster profile:
@@ -152,61 +111,114 @@ Cluster profile:
 | 0 | 325 | 86.46 | 57.84 | 121.50 | 1.63 | 78.15 |
 | 1 | 409 | 30.56 | 50.68 | 148.20 | 0.26 | 11.25 |
 
-Interpretation:
+KMeans gives the clearest patient segmentation in this notebook. Cluster 0 looks like a higher-risk profile, while Cluster 1 looks like a lower-risk profile.
 
-- `Cluster 0` looks like the higher-risk group in this dataset. It has higher heart-disease rate, higher oldpeak, lower maximum heart rate, and much higher exercise-induced angina rate.
-- `Cluster 1` looks like the lower-risk group. It has lower heart-disease rate, higher maximum heart rate, lower oldpeak, and much lower exercise-induced angina rate.
+### Hierarchical Clustering
 
-The silhouette score for `k = 2` is about `0.19`, so the clusters should be treated as exploratory groups, not clinically validated patient segments.
+Agglomerative hierarchical clustering is applied with Ward linkage. Candidate cluster counts are compared using silhouette score.
 
-## Output Files
+The best selected value is:
 
-Generated figures include:
+```text
+k = 2
+silhouette_score = 0.1630
+```
 
-- `target_distribution_train.png`
-- `numeric_distributions_by_target.png`
-- `categorical_positive_rates_train.png`
-- `correlation_matrix_train.png`
-- `final_confusion_matrix.png`
-- `final_roc_curve.png`
-- `phase2_pca_training_view.png`
-- `phase2_kmeans_k_selection.png`
-- `phase2_kmeans_clusters_pca.png`
+Cluster profile:
 
-Generated metric files include:
+| Cluster | Size | Heart Disease % | Avg Age | Avg MaxHR | Avg Oldpeak | Exercise Angina % |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 318 | 85.85 | 56.86 | 116.80 | 1.34 | 79.56 |
+| 1 | 416 | 31.97 | 51.55 | 151.34 | 0.50 | 11.30 |
 
-- `cross_validation_model_comparison.csv`
-- `tuned_model_results.csv`
-- `final_test_metrics.json`
-- `final_test_predictions.csv`
-- `project_summary.csv`
-- `phase2_kmeans_k_selection.csv`
-- `phase2_cluster_profile.csv`
+The hierarchical result supports the same general interpretation found by KMeans: one higher-risk group and one lower-risk group.
 
-## How To Run
+### DBSCAN
+
+DBSCAN is used as a density-based clustering comparison. It does not require choosing `k`, but it is sensitive to `eps` and `min_samples`.
+
+Selected setting:
+
+```text
+eps = 2.25
+min_samples = 10
+clusters = 2
+noise points = 288
+noise percentage = 39.24%
+```
+
+DBSCAN profile:
+
+| Label | Size | Heart Disease % | Avg Age | Avg MaxHR | Avg Oldpeak | Exercise Angina % |
+|---:|---:|---:|---:|---:|---:|---:|
+| -1 Noise | 288 | 61.46 | 56.62 | 134.69 | 1.03 | 33.33 |
+| 0 | 412 | 47.57 | 51.46 | 138.53 | 0.70 | 41.26 |
+| 1 | 34 | 97.06 | 59.35 | 124.53 | 1.42 | 100.00 |
+
+DBSCAN is useful as a density and noise check, but it is not the best segmentation method for this dataset because it labels a large portion of the records as noise.
+
+### t-SNE
+
+t-SNE is used only for visualization. Unlike PCA, which preserves global variance, t-SNE focuses more on local neighborhoods.
+
+The notebook visualizes t-SNE in two ways:
+
+- Colored by KMeans cluster labels
+- Colored by the true `HeartDisease` label for interpretation only
+
+The t-SNE output is not used for model training or final evaluation.
+
+### Isolation Forest
+
+Isolation Forest is used for unsupervised anomaly detection.
+
+Configuration:
+
+```text
+contamination = 0.05
+```
+
+Results:
+
+| Item | Value |
+|---|---:|
+| Anomaly count | 37 |
+| Anomaly percentage | 5.04% |
+
+Anomaly profile:
+
+| Group | Size | Heart Disease % | Avg Age | Avg RestingBP | Avg Cholesterol | Avg MaxHR | Avg Oldpeak | Exercise Angina % |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Normal | 697 | 55.67 | 53.60 | 132.42 | 245.70 | 136.47 | 0.83 | 40.60 |
+| Anomaly | 37 | 48.65 | 58.51 | 141.51 | 262.55 | 134.57 | 1.50 | 45.95 |
+
+Anomalies are not automatically heart-disease cases. They are records with unusual combinations of features compared with the rest of the training data.
+
+## Main Findings
+
+- KMeans is the strongest clustering method for this project because it gives the clearest and most interpretable segmentation.
+- Hierarchical clustering supports the KMeans interpretation with a similar two-group structure.
+- DBSCAN shows that the dataset does not have very clean density-based clusters in the encoded feature space.
+- PCA and t-SNE are useful for visualization, but not for final prediction.
+- Isolation Forest identifies unusual patient records, but anomalies should be reviewed carefully and not treated as automatic disease cases.
+- `HeartDisease` is never used during unsupervised fitting, only after fitting for interpretation.
+
+## How to Run
 
 Install the required packages:
 
 ```bash
-pip install -r requirements.txt
+pip install numpy pandas matplotlib scikit-learn scipy notebook
 ```
 
-Run the notebook:
+Open the notebook:
 
 ```bash
-jupyter notebook notebooks/Heart_Disease_Classification_Final.ipynb
+jupyter notebook Heart_Disease_Classification_Final.ipynb
 ```
 
-The notebook should be run from the project folder so it can find:
+Run all cells from top to bottom. The notebook will create output folders for metrics and figures when needed.
 
-```text
-data/heart.csv
-```
+## Conclusion
 
-## Limitations
-
-- The dataset is a merged heart disease dataset, and the original source of each row is not available as a feature.
-- The target represents heart disease presence in the available record, not future disease risk.
-- The project is not a medical diagnosis system.
-- The final supervised result is based on one held-out test split, not external clinical validation.
-- The unsupervised clusters are exploratory and should not be interpreted as medical categories.
+This notebook extends the supervised heart disease classification project with a complete Week 5 unsupervised learning analysis. The best practical clustering result comes from KMeans, supported by Hierarchical Clustering. DBSCAN, PCA, t-SNE, and Isolation Forest add useful exploratory views, but the final interpretation remains exploratory and should not be treated as medical diagnosis.

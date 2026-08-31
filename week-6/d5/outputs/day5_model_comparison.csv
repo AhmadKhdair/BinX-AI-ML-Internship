@@ -1,0 +1,4 @@
+model,accuracy,precision,recall,f1,roc_auc,params,notes,f1_delta_vs_rf,roc_auc_delta_vs_rf
+Day 1 tuned Random Forest,0.8696,0.8679,0.902,0.8846,0.9173,,classical baseline from Day 1/final project,0.0,0.0
+Day 4 NN,0.8587,0.8585,0.8922,0.875,0.9014,4161.0,"BatchNorm + Dropout, last Day 4 selected model",-0.009600000000000053,-0.015900000000000025
+Day 5 tuned NN,0.8641304347826086,0.8811881188118812,0.8725490196078431,0.8768472906403941,0.930416068866571,4161.0,"selected by validation loss, evaluated once on test",-0.007752709359605925,0.013116068866571018

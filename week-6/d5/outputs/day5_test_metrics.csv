@@ -1,0 +1,2 @@
+model,accuracy,precision,recall,f1,roc_auc,pr_auc,threshold,params,selected_experiment
+Day 5 tuned neural network,0.8641304347826086,0.8811881188118812,0.8725490196078431,0.8768472906403941,0.930416068866571,0.9327762865739025,0.5,4161,dropout_0p1

@@ -1,0 +1,3 @@
+hierarchical_cluster,size,heart_disease_pct,avg_age,avg_max_hr,avg_oldpeak,exercise_angina_pct
+0,318,85.85,56.86,116.8,1.34,79.56
+1,416,31.97,51.55,151.34,0.5,11.3
