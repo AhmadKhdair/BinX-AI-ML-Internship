@@ -1,0 +1,2 @@
+model,selected_experiment,family,threshold,accuracy,precision,recall,f1,roc_auc,pr_auc
+Week 7 Day 5 Sprint 2 model,hgb_lr_0p05_l2_0p0_leaf_15,HistGradientBoosting,0.5,0.8641304347826086,0.8969072164948454,0.8529411764705882,0.8743718592964824,0.9091343854615017,0.9201460005330377

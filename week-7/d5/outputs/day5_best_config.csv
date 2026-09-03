@@ -1,0 +1,2 @@
+selected_experiment,family,selected_threshold,threshold_policy,val_f1,val_roc_auc,val_pr_auc,selection_rule
+hgb_lr_0p05_l2_0p0_leaf_15,HistGradientBoosting,0.5,default 0.5,0.8771929824561403,0.9098391320613544,0.8856457631375059,highest validation F1; ROC-AUC tie-breaker; test still unused

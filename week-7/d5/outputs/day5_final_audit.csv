@@ -1,0 +1,11 @@
+check,passed
+dataset_exists,True
+dataset_shape_is_expected,True
+historical_metrics_loaded,True
+test_split_locked,True
+experiments_logged,True
+validation_selection_recorded,True
+threshold_selected_from_validation,True
+final_test_metrics_written,True
+comparison_written,True
+beats_week6_rf_f1,False
